@@ -5,6 +5,7 @@ import { Activity, Eye, EyeOff, ArrowRight, AlertCircle } from 'lucide-react';
 import CobeMavenGlobe from '../components/ui/CobeMavenGlobe';
 import Dither from '../components/ui/Dither';
 import KineticGrid from '../components/ui/KineticGrid';
+import { useAuth } from '../contexts/AuthContext';
 
 // ── Liquid glass input ────────────────────────────────────────────
 function GlassInput({
@@ -86,6 +87,7 @@ const STATUS_CHARS = ['▓▓▓░░', '▓▓▓▓░', '▓▓▓▓▓'];
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const { signIn } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPw, setShowPw] = useState(false);
@@ -108,12 +110,14 @@ export default function LoginPage() {
     setError('');
     if (!email || !password) { setError('ALL FIELDS REQUIRED'); return; }
     setLoading(true);
-    await new Promise(r => setTimeout(r, 1800));
+    
+    const { error: signInError } = await signIn(email, password);
     setLoading(false);
-    if (email === 'admin@maven.ai' && password === 'maven6.7') {
-      navigate('/dashboard');
+    
+    if (signInError) {
+      setError(signInError.message || 'AUTH FAILED — INVALID CREDENTIALS');
     } else {
-      setError('AUTH FAILED — INVALID CREDENTIALS');
+      navigate('/dashboard');
     }
   };
 
