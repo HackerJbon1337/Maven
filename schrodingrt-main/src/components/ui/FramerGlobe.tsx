@@ -1,4 +1,5 @@
 import React, { useEffect, useState, ComponentType } from 'react';
+import DepthGlobe from './DepthGlobe';
 
 /**
  * Dynamically loads the Framer DepthGlobe component at runtime.
@@ -24,7 +25,7 @@ export default function FramerGlobe({ width = '100%', height = '100%' }: { width
   }, []);
 
   if (error) {
-    // Fallback: monochromatic pulsing orb
+      // Fallback: local interactive globe if remote Framer module fails.
     return (
       <div
         style={{
@@ -35,17 +36,7 @@ export default function FramerGlobe({ width = '100%', height = '100%' }: { width
           justifyContent: 'center',
         }}
       >
-        <div
-          style={{
-            width: 320,
-            height: 320,
-            borderRadius: '50%',
-            background: 'radial-gradient(circle at 35% 35%, #1a1a1a, #050505)',
-            border: '1px solid rgba(255,255,255,0.06)',
-            boxShadow: '0 0 80px rgba(16,185,129,0.08), inset 0 0 40px rgba(0,240,255,0.04)',
-            animation: 'pulse 4s ease-in-out infinite',
-          }}
-        />
+          <DepthGlobe width={width} height={height} />
       </div>
     );
   }
