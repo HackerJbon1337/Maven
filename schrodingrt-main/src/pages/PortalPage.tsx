@@ -26,6 +26,10 @@ const crtStyle = `
     0%   { opacity: 1; }
     100% { opacity: 0.97; }
   }
+  @keyframes bootFlow {
+    0%   { transform: translateY(0); }
+    100% { transform: translateY(-50%); }
+  }
   .bracket-btn {
     font-family: 'VT323', monospace;
     font-size: 1.05rem;
@@ -68,6 +72,35 @@ const crtStyle = `
     font-family: 'VT323', monospace;
     color: #3a7a1a;
   }
+  .linux-boot-stream {
+    position: absolute;
+    top: -35vh;
+    left: -35vw;
+    width: 170vw;
+    height: 190vh;
+    overflow: hidden;
+    transform: rotate(-8deg) skewX(-14deg);
+    transform-origin: left top;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+    opacity: 0.28;
+    filter: drop-shadow(0 0 8px rgba(120, 255, 70, 0.14));
+    mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,1) 16%, rgba(0,0,0,1) 84%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,1) 16%, rgba(0,0,0,1) 84%, transparent 100%);
+  }
+  .linux-boot-track {
+    animation: bootFlow 18s linear infinite;
+  }
+  .linux-boot-line {
+    font-family: 'VT323', monospace;
+    color: #9bff5a;
+    letter-spacing: 0.08em;
+    font-size: clamp(0.62rem, 0.95vw, 0.88rem);
+    line-height: 1.1;
+    white-space: nowrap;
+    text-shadow: 0 0 8px rgba(155,255,90,0.16);
+  }
 `;
 
 // ── ASCII boot lines ──────────────────────────────────────────────
@@ -81,6 +114,40 @@ const BOOT_LINES = [
   'SYSTEM READY.',
   '─────────────────────────────────────────────',
 ];
+
+const NOISE_SYLLABLES = [
+  'kmod', 'blk', 'nvme', 'irq', 'sys', 'drm', 'mtr', 'acpi', 'bus', 'io',
+  'dma', 'mux', 'sched', 'pkt', 'core', 'cache', 'swap', 'bind', 'pipe', 'rnd',
+  'tty', 'xfrm', 'cgrp', 'zram', 'hook', 'trace', 'inode', 'route', 'ping', 'loop',
+];
+
+function randomHex(length: number) {
+  const chars = '0123456789abcdef';
+  let out = '';
+  for (let i = 0; i < length; i++) {
+    out += chars[Math.floor(Math.random() * chars.length)];
+  }
+  return out;
+}
+
+function randomSyllables(count: number) {
+  let out = '';
+  for (let i = 0; i < count; i++) {
+    out += (i ? '-' : '') + NOISE_SYLLABLES[Math.floor(Math.random() * NOISE_SYLLABLES.length)];
+  }
+  return out;
+}
+
+function buildBootNoiseLine(index: number) {
+  const t1 = String((index * 7) % 60).padStart(2, '0');
+  const t2 = String((index * 37) % 1000).padStart(3, '0');
+  const code = randomHex(8);
+  const chunkA = randomSyllables(2 + (index % 2));
+  const chunkB = randomSyllables(2 + (index % 3));
+  return `[ ${t1}.${t2} ] ${chunkA}.${chunkB} 0x${code} ${randomHex(4)}::${randomHex(4)} ${randomSyllables(3)}`;
+}
+
+const BOOT_NOISE_LINES = Array.from({ length: 140 }, (_, i) => buildBootNoiseLine(i));
 
 // ── ASCII Globe art ──────────────────────────────────────────────
 const GLOBE_ART = `
@@ -190,25 +257,41 @@ export default function PortalPage() {
             initial={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5 }}
-            className="fixed inset-0 bg-black z-[100] flex flex-col items-start justify-center px-12"
+            className="fixed inset-0 bg-black z-[100] flex flex-col items-start justify-start py-12 px-8 overflow-hidden relative"
           >
-            <p className="pixel-dim text-sm mb-6 tracking-widest">MAVEN GLOBAL SUPPLY CHAIN ENGINE v6.7</p>
-            {bootLines.map((line, i) => (
-              <motion.p
-                key={i}
-                initial={{ opacity: 0, x: -8 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.18 }}
-                className="pixel-text text-sm tracking-wider"
-              >
-                {line}
-              </motion.p>
-            ))}
-            <motion.span
-              animate={{ opacity: [1, 0] }}
-              transition={{ repeat: Infinity, duration: 0.6 }}
-              className="pixel-text text-lg mt-1"
-            >█</motion.span>
+            <div className="linux-boot-stream" aria-hidden="true">
+              {[0, 1, 2].map(col => (
+                <div
+                  key={col}
+                  className="linux-boot-track"
+                  style={{ animationDelay: `-${col * 6}s` }}
+                >
+                  {[...BOOT_NOISE_LINES, ...BOOT_NOISE_LINES].map((line, i) => (
+                    <p key={`${col}-${i}`} className="linux-boot-line">{line}</p>
+                  ))}
+                </div>
+              ))}
+            </div>
+
+            <div className="relative z-10">
+              <p className="pixel-dim text-sm mb-6 tracking-widest">MAVEN GLOBAL SUPPLY CHAIN ENGINE v6.7</p>
+              {bootLines.map((line, i) => (
+                <motion.p
+                  key={i}
+                  initial={{ opacity: 0, x: -8 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.18 }}
+                  className="pixel-text text-sm tracking-wider"
+                >
+                  {line}
+                </motion.p>
+              ))}
+              <motion.span
+                animate={{ opacity: [1, 0] }}
+                transition={{ repeat: Infinity, duration: 0.6 }}
+                className="pixel-text text-lg mt-1"
+              >█</motion.span>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

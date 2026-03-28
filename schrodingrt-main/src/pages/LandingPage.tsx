@@ -28,6 +28,7 @@ import Carousel from '../components/ui/Carousel';
 import HorizontalScrollBento from '../components/ui/HorizontalScrollBento';
 import ShipmentGlobe from '../components/ui/ShipmentGlobe';
 import DepthGlobe from '../components/ui/DepthGlobe';
+import ScrollRevealText from '../components/ui/ScrollRevealText';
 
 // ─────────────────────────────────────────────────────────────
 // Dynamic Island Navbar — liquid glass pill, morphs on scroll
@@ -70,14 +71,11 @@ function DynamicIslandNav({ onDash, onLogin, onPortal }: { onDash: () => void; o
       >
         {/* Brand */}
         <div className="flex items-center gap-2.5 shrink-0">
-          <div
-            className="w-7 h-7 rounded-full flex items-center justify-center"
-            style={{ background: 'rgba(0,240,255,0.15)', border: '1px solid rgba(0,240,255,0.3)' }}
-          >
-            <Activity className="w-3.5 h-3.5 text-[#00f0ff]" />
+          <div className="flex items-center justify-center overflow-hidden">
+            <img src="/logo.png" alt="MAVEN M Logo" className="w-8 h-8 object-contain" />
           </div>
           <motion.span
-            className="font-bold text-white text-sm tracking-widest"
+            className="font-bold text-white text-sm tracking-widest mt-0.5"
             style={{ fontFamily: "'Space Grotesk', sans-serif" }}
             animate={{ opacity: scrolled ? 0 : 1, width: scrolled ? 0 : 'auto', marginRight: scrolled ? 0 : undefined }}
             transition={{ duration: 0.3 }}
@@ -142,16 +140,16 @@ function DynamicIslandNav({ onDash, onLogin, onPortal }: { onDash: () => void; o
 // Logo marquee constants for hero bottom strip
 // ─────────────────────────────────────────────────────────────
 const MARQUEE_LOGOS = [
-  { name: 'MAERSK',    icon: '⬡' },
-  { name: 'COSCO',     icon: '◈' },
-  { name: 'DHL',       icon: '◆' },
-  { name: 'FEDEX',     icon: '▲' },
-  { name: 'MSC',       icon: '⬢' },
-  { name: 'CARGILL',   icon: '◉' },
+  { name: 'MAERSK', icon: '⬡' },
+  { name: 'COSCO', icon: '◈' },
+  { name: 'DHL', icon: '◆' },
+  { name: 'FEDEX', icon: '▲' },
+  { name: 'MSC', icon: '⬢' },
+  { name: 'CARGILL', icon: '◉' },
   { name: 'EVERGREEN', icon: '⬟' },
-  { name: 'HAPAG',     icon: '◈' },
-  { name: 'UPS',       icon: '◆' },
-  { name: 'KUEHNE',    icon: '⬡' },
+  { name: 'HAPAG', icon: '◈' },
+  { name: 'UPS', icon: '◆' },
+  { name: 'KUEHNE', icon: '⬡' },
 ];
 
 // ─────────────────────────────────────────────────────────────
@@ -177,7 +175,7 @@ function Trench({ children, delay = 0, className = '' }: { children: React.React
 // ─────────────────────────────────────────────────────────────
 const CAROUSEL_ITEMS = [
   { title: 'Predictive Risk Engine', subtitle: '// 00A', accent: '#00f0ff', content: <p style={{ fontFamily: "'Outfit', sans-serif" }} className="text-gray-400 text-sm leading-relaxed">Analyzes 4M+ historical parameters and live OSINT to detect geopolitical choke points 96 hours in advance.</p> },
-  { title: 'Autonomous Rerouting',   subtitle: '// 00B', accent: '#10b981', content: <p style={{ fontFamily: "'Outfit', sans-serif" }} className="text-gray-400 text-sm leading-relaxed">Webhooks directly to your ERP in milliseconds — zero human intervention required.</p> },
+  { title: 'Autonomous Rerouting', subtitle: '// 00B', accent: '#10b981', content: <p style={{ fontFamily: "'Outfit', sans-serif" }} className="text-gray-400 text-sm leading-relaxed">Webhooks directly to your ERP in milliseconds — zero human intervention required.</p> },
   { title: 'Gemini 3.1 Intel Node', subtitle: '// 00C', accent: '#ffffff', content: <p style={{ fontFamily: "'Outfit', sans-serif" }} className="text-gray-400 text-sm leading-relaxed">Ask "Which vessels face delays this week?" in plain English and get instant structured answers.</p> },
 ];
 
@@ -193,13 +191,13 @@ export default function LandingPage() {
   // section 2  → right (+35%)
   // section 3  → left (–35%)
   // section 4+ → right (+28%)
-  const rawX  = useTransform(scrollY, [0, 400, 800, 1400, 2200], [0, 100, -200, 200, -200]);
+  const rawX = useTransform(scrollY, [0, 400, 800, 1400, 2200], [0, 100, -200, 200, -200]);
   const rawYG = useTransform(scrollY, [0, 400, 800, 1400], [0, 60, 120, 180]);
   const rawSc = useTransform(scrollY, [0, 500, 1800], [1.1, 0.68, 0.52]);
   const rawOp = useTransform(scrollY, [0, 400, 1200, 3000], [1, 0.9, 0.4, 0.1]);
 
   const springCfg = { stiffness: 38, damping: 18, mass: 1.2 };
-  const globeX  = useSpring(rawX,  springCfg);
+  const globeX = useSpring(rawX, springCfg);
   const globeYG = useSpring(rawYG, springCfg);
   const globeSc = useSpring(rawSc, springCfg);
 
@@ -238,16 +236,16 @@ export default function LandingPage() {
         <motion.div
           className="fixed z-[1] pointer-events-none"
           style={{
-            width:      '110vmax',
-            height:     '110vmax',
-            top:        '50%',
-            left:       '50%',
-            marginTop:  '-55vmax',
+            width: '110vmax',
+            height: '110vmax',
+            top: '50%',
+            left: '50%',
+            marginTop: '-55vmax',
             marginLeft: '-55vmax',
-            x:          globeX,
-            y:          globeYG,
-            scale:      globeSc,
-            opacity:    rawOp,
+            x: globeX,
+            y: globeYG,
+            scale: globeSc,
+            opacity: rawOp,
           }}
         >
           <CobeMavenGlobe />
@@ -286,7 +284,7 @@ export default function LandingPage() {
 
           {/* ── Main content wrapper — two columns ── */}
           <div className="flex-1 flex w-full max-w-7xl mx-auto px-6 lg:px-12 items-center">
-            
+
             {/* Left Side — Content */}
             <div className="w-full md:w-1/2 flex flex-col justify-center">
               {/* Status chip */}
@@ -323,7 +321,7 @@ export default function LandingPage() {
                     letterSpacing: '-0.03em',
                   }}
                 >
-                  A new way<br />to orchestrate.
+                  A new way of<br />rerouting supply chains.
                 </motion.h1>
               </div>
 
@@ -461,9 +459,9 @@ export default function LandingPage() {
                   <div className="space-y-8">
                     {[
                       { label: 'EXECUTION LATENCY', value: '<12ms', color: '#10b981' },
-                      { label: 'SYSTEM COHERENCE',  value: '99.9%', color: '#fff' },
-                      { label: 'ANOMALIES STOPPED', value: '93+',   color: '#ef4444' },
-                      { label: 'ASSETS TRACKED',    value: '18,504',color: '#a855f7' },
+                      { label: 'SYSTEM COHERENCE', value: '99.9%', color: '#fff' },
+                      { label: 'ANOMALIES STOPPED', value: '93+', color: '#ef4444' },
+                      { label: 'ASSETS TRACKED', value: '18,504', color: '#a855f7' },
                     ].map(s => (
                       <div key={s.label}>
                         <p className="text-gray-700 text-[10px] tracking-[0.35em] mb-1" style={{ fontFamily: "'Outfit', sans-serif" }}>{s.label}</p>
@@ -516,9 +514,9 @@ export default function LandingPage() {
 
             <div className="hidden md:grid grid-cols-3 gap-5">
               {[
-                { icon: <ShieldAlert className="w-7 h-7" />, accent: '#ef4444', tag: 'RISK',    title: 'Dynamic Risk Avoidance',   items: ['Geopolitical choke-point detection', 'Hurricane weather rerouting', 'Predictive piracy alerts'] },
-                { icon: <Terminal    className="w-7 h-7" />, accent: '#00f0ff', tag: 'AI',      title: 'Gemini 3.1 Synthesis',     items: ['Natural language DB querying', 'Continuous context window sync', 'Autonomous multi-agent verification'] },
-                { icon: <Anchor      className="w-7 h-7" />, accent: '#10b981', tag: 'FINANCE', title: 'Automated Freight Pricing', items: ['Live API rail & sea integrations', 'Real-time crude oil calculations', 'Port congestion predictions'] },
+                { icon: <ShieldAlert className="w-7 h-7" />, accent: '#ef4444', tag: 'RISK', title: 'Dynamic Risk Avoidance', items: ['Geopolitical choke-point detection', 'Hurricane weather rerouting', 'Predictive piracy alerts'] },
+                { icon: <Terminal className="w-7 h-7" />, accent: '#00f0ff', tag: 'AI', title: 'Gemini 3.1 Synthesis', items: ['Natural language DB querying', 'Continuous context window sync', 'Autonomous multi-agent verification'] },
+                { icon: <Anchor className="w-7 h-7" />, accent: '#10b981', tag: 'FINANCE', title: 'Automated Freight Pricing', items: ['Live API rail & sea integrations', 'Real-time crude oil calculations', 'Port congestion predictions'] },
               ].map((p, i) => (
                 <motion.div
                   key={i}
@@ -553,36 +551,34 @@ export default function LandingPage() {
         </section>
 
         {/* ════════════════════════════════════════════════════
-            SECTION 5 — TESTIMONIALS
+            SECTION 5 — PROJECT INSIGHTS (SCROLL REVEAL)
             ════════════════════════════════════════════════════ */}
         <section
-          className="relative z-[10] border-t"
+          className="relative z-[10] border-t py-48"
           style={{ background: 'rgba(2,2,2,0.68)', backdropFilter: 'blur(20px)', borderColor: 'rgba(255,255,255,0.04)' }}
         >
-          <HugeRevealText text="CONSENSUS LOGS">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 py-24 pb-40 max-w-7xl mx-auto px-6">
-              {[
-                { accent: '#fff',     quote: '"MAVEN 6.7 predicted the Suez bottleneck 4 days before it happened. We rerouted and saved $1.2M."', name: 'Marcus R.', role: 'VP Ops, Global Logistics Solutions' },
-                { accent: '#10b981', quote: '"We phased out 4 legacy platforms the day we booted MAVEN. The Gemini node answers routing queries instantly."', name: 'Sarah L.', role: 'CTO, Pan-Atlantic Freighters' },
-              ].map((t, i) => (
-                <GradualBlur key={i} delay={i * 0.1}>
-                  <LiquidGlassCard glowColor={t.accent} className={`p-8 flex flex-col justify-between h-full ${i === 1 ? 'bg-[#10b981]/4' : 'bg-black/20'}`}>
-                    <div className="flex gap-1 text-[#10b981] mb-8">{[...Array(5)].map((_, si) => <StarIcon key={si} />)}</div>
-                    <p className="text-lg font-medium leading-relaxed mb-10" style={{ color: i === 1 ? '#10b981' : '#c0c0c0' }}>{t.quote}</p>
-                    <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: t.accent + '10', border: `1px solid ${t.accent}22` }}>
-                        <Activity size={15} style={{ color: t.accent === '#fff' ? '#888' : t.accent }} />
-                      </div>
-                      <div>
-                        <p className="font-bold tracking-widest text-sm text-white" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{t.name}</p>
-                        <p className="text-xs tracking-wider text-gray-600">{t.role}</p>
-                      </div>
-                    </div>
-                  </LiquidGlassCard>
-                </GradualBlur>
-              ))}
+          <div className="max-w-7xl mx-auto px-6 flex flex-col items-center text-center">
+            
+            <div className="relative w-full rounded-3xl overflow-hidden py-24 px-10 md:px-20 border border-white/5" style={{ background: 'rgba(6,6,6,0.6)', boxShadow: '0 0 0 1px rgba(255,255,255,0.02) inset, 0 40px 100px rgba(0,0,0,0.8)' }}>
+              {/* Inner glowing effect for card */}
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-[1px] bg-gradient-to-r from-transparent via-[#00f0ff]/30 to-transparent" />
+              <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[80%] h-64 bg-[#00f0ff]/10 blur-[100px] rounded-full mix-blend-screen pointer-events-none" />
+              
+              <GradualBlur className="mb-12 relative z-10">
+                <ShieldAlert className="w-12 h-12 text-[#00f0ff] opacity-90 mb-6 mx-auto drop-shadow-[0_0_15px_rgba(0,240,255,0.5)]" strokeWidth={1.5} />
+                <p className="text-sm md:text-xl tracking-[0.4em] text-white uppercase opacity-90 mb-10 font-bold" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                  // Core Philosophy
+                </p>
+              </GradualBlur>
+              
+              <div className="relative z-10 max-w-5xl mx-auto">
+                <ScrollRevealText 
+                  text="maven 6.7 is not a standard routing engine. it is a living neural network designed to understand the chaotic flow of global commerce. by ingesting billions of data points across oceanic, aerial, and land-based networks, it calculates thousands of probability grids instantly. it doesn't just react to problems, it anticipates them — ensuring your fleet remains untouchable. built for absolute scale. engineered for speed. executing complex logistics autonomously, every twelve milliseconds."
+                  className="text-4xl md:text-5xl lg:text-7xl font-bold tracking-tighter leading-[1.15] text-white justify-center"
+                />
+              </div>
             </div>
-          </HugeRevealText>
+          </div>
         </section>
 
         {/* ════════════════════════════════════════════════════
@@ -600,9 +596,9 @@ export default function LandingPage() {
             </GradualBlur>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5 items-center">
               {[
-                { title: 'SINGLE VESSEL',       price: '$19',   sub: '/ cycle', desc: 'Track one high-value asset.', btn: 'Initialize Node',   color: '#444', popular: false },
-                { title: 'FLEET COMMAND',       price: '$89',   sub: '/ cycle', desc: 'Track up to 500 vessels.',   btn: 'Deploy Cluster',    color: '#10b981', popular: true },
-                { title: 'GLOBAL ENTERPRISE',   price: 'CUSTOM',sub: '',        desc: 'Custom neural AI modeling.', btn: 'Contact Command',   color: '#444', popular: false },
+                { title: 'SINGLE VESSEL', price: '$19', sub: '/ cycle', desc: 'Track one high-value asset.', btn: 'Initialize Node', color: '#444', popular: false },
+                { title: 'FLEET COMMAND', price: '$89', sub: '/ cycle', desc: 'Track up to 500 vessels.', btn: 'Deploy Cluster', color: '#10b981', popular: true },
+                { title: 'GLOBAL ENTERPRISE', price: 'CUSTOM', sub: '', desc: 'Custom neural AI modeling.', btn: 'Contact Command', color: '#444', popular: false },
               ].map((tier, i) => (
                 <motion.div key={i} initial={{ y: 40, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: i * 0.09 }} className={tier.popular ? 'md:-translate-y-5' : ''}>
                   <LiquidGlassCard glowColor={tier.color} className={`p-9 flex flex-col items-center text-center ${tier.popular ? 'bg-[#10b981]/6' : 'bg-black/20'}`}>
@@ -627,43 +623,44 @@ export default function LandingPage() {
         {/* ════════════════════════════════════════════════════
             FOOTER
             ════════════════════════════════════════════════════ */}
-        <footer className="relative z-[10] border-t pt-32 pb-10 overflow-hidden" style={{ background: 'rgba(2,2,2,0.98)', borderColor: 'rgba(255,255,255,0.04)' }}>
-          <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-12 gap-12 mb-28">
-            <div className="md:col-span-6">
-              <h3 className="text-2xl font-bold mb-3" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>Initialize Intel Updates</h3>
-              <p className="text-gray-600 text-sm mb-6 leading-relaxed">Get real-time intelligence on shipping anomalies, MAVEN updates, and routing data.</p>
-              <div className="flex bg-[#0a0a0a] border border-white/5 p-1 rounded-xl">
-                <input type="email" placeholder="ENTER COMM-LINK EMAIL" className="bg-transparent border-none text-white px-4 text-xs tracking-widest flex-1 focus:outline-none" />
-                <button className="bg-white text-black px-5 py-2.5 text-[10px] tracking-widest font-bold uppercase rounded-lg hover:bg-[#10b981] transition-colors" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                  Establish Link
-                </button>
-              </div>
+        <footer className="relative z-[10] border-t pt-28 pb-10 overflow-hidden" style={{ background: 'rgba(2,2,2,0.95)', backdropFilter: 'blur(20px)', borderColor: 'rgba(255,255,255,0.04)' }}>
+          <div className="relative z-10 max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-12 gap-12 mb-20">
+            <div className="md:col-span-4">
+              <h3 className="text-xl font-bold mb-3 tracking-widest text-[#00f0ff]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>MAVEN 6.7</h3>
+              <p className="text-gray-500 text-xs mb-6 leading-relaxed">Next-generation global supply chain intelligence and predictive routing terminal.</p>
             </div>
-            {[{ title: 'PLATFORM', links: ['Architecture', 'Simulation', 'Pricing'] }, { title: 'DEVELOPERS', links: ['API Docs', 'GitHub', 'Status'] }].map((col, i) => (
-              <div key={i} className={`md:col-span-2 ${i === 0 ? 'md:col-start-9' : ''} flex flex-col gap-3 text-sm text-gray-600`}>
-                <span className="text-white font-bold mb-1 tracking-widest text-xs" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{col.title}</span>
-                {col.links.map(l => <a key={l} href="#" className="hover:text-white transition-colors tracking-wide">{l}</a>)}
+            {[{ title: 'COMPANY', links: [{name: 'About', path: '/about'}, {name: 'Contact', path: '/contact'}] }, { title: 'LEGAL', links: [{name: 'Legal Overview', path: '/legal'}, {name: 'Help Links', path: '/links'}] }].map((col, i) => (
+              <div key={i} className={`md:col-span-2 ${i === 0 ? 'md:col-start-7' : ''} flex flex-col gap-3 text-xs tracking-widest text-gray-400`}>
+                <span className="text-white font-bold mb-2 tracking-widest text-[10px] uppercase" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{col.title}</span>
+                {col.links.map(l => <a key={l.name} href={l.path} className="hover:text-white transition-colors tracking-wide">{l.name}</a>)}
               </div>
             ))}
           </div>
 
-          <div className="w-full text-center select-none pointer-events-none overflow-hidden mb-8">
-            <h1 className="font-black tracking-tighter leading-none" style={{ fontSize: 'clamp(52px, 12vw, 160px)', fontFamily: "'Space Grotesk', sans-serif", color: '#0c0c0c' }}>
+          <div className="relative z-10 w-full text-center select-none pointer-events-none overflow-hidden mb-6">
+            <h1 className="font-black tracking-tighter leading-none" style={{ fontSize: 'clamp(52px, 12vw, 160px)', fontFamily: "'Space Grotesk', sans-serif", color: 'rgba(255,255,255,0.08)' }}>
               MAVEN 6.7
             </h1>
           </div>
 
-          <div className="max-w-7xl mx-auto px-6 flex justify-between items-center text-[10px] text-[#1e1e1e] border-t border-white/3 pt-6">
+          <div className="relative z-10 max-w-7xl mx-auto px-6 flex justify-between items-center text-[9px] uppercase tracking-[0.2em] text-gray-600 border-t border-white/5 pt-8">
             <span>© 2026 MAVEN SUPPLY CHAIN ENGINE.</span>
             <span>POWERED BY GEMINI 3.1 PRO NEURAL ENGINE</span>
           </div>
         </footer>
 
+        {/* ── Global Aurora Background for Lower Sections ── */}
+        <div className="fixed inset-0 z-[0] pointer-events-none overflow-hidden mix-blend-screen opacity-50">
+          <div className="absolute top-[20%] font-bold left-[-10%] w-[40vw] h-[60vh] bg-[#00f0ff] opacity-[0.15] blur-[180px] rounded-full" />
+          <div className="absolute top-[50%] -right-[10%] w-[50vw] h-[70vh] bg-[#10b981] opacity-[0.12] blur-[200px] rounded-full" />
+          <div className="absolute bottom-[-10%] left-[10%] w-[60vw] h-[50vh] bg-[#4f46e5] opacity-[0.2] blur-[160px] rounded-full" />
+        </div>
+
         {/* Dock */}
         <Dock>
-          <DockIcon icon={<Globe size={20} />} label="Home"      isActive={true} />
+          <DockIcon icon={<Globe size={20} />} label="Home" isActive={true} />
           <DockIcon icon={<Activity size={20} />} label="Dashboard" onClick={() => navigate('/dashboard')} />
-          <DockIcon icon={<Github size={20} />}   label="Source"    onClick={() => window.open('https://github.com/jeswanthd')} />
+          <DockIcon icon={<Github size={20} />} label="Source" onClick={() => window.open('https://github.com/jeswanthd')} />
         </Dock>
 
       </div>
